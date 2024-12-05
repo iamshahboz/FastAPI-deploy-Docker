@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+import enum 
 
 class TodoBase(BaseModel):
     title : str
@@ -33,3 +34,18 @@ class User(UserBase):
 
     class Config:
         from_attributes = True
+        
+class TransmissionEnum(enum.Enum):
+    MANUAL = 1
+    AUTOMATIC = 2 
+    CVT = 3 
+        
+        
+class CarBase(BaseModel):
+    name: str 
+    color: str 
+    transmission: TransmissionEnum = Form(...)
+    image: UploadFile() = File(...)
+        
+
+    

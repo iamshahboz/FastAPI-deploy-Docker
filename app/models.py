@@ -1,5 +1,6 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
+from .schemas import TransmissionEnum
 
 from app.database import Base
 
@@ -21,3 +22,13 @@ class Todo(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User",back_populates="todos")
+    
+    
+class Car(Base):
+    __tablename__ = "cars"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), index=True)
+    color = Column(String(50))
+    transmission = Column(Enum(TransmissionEnum))
+    image = Column(String(255), nullable=False)
+    
