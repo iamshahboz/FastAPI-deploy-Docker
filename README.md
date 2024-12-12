@@ -12,7 +12,7 @@ docker build -t fastapi-app .
 
 run the docker image 
 ```bash
-docker run -p 8002:8002 fastapi-app
+docker run -d -p 8002:8002 fastapi-app
 ```
 
 list containers
