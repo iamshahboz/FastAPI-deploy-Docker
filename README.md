@@ -46,3 +46,23 @@ docker kill <container_id>
 ```
 
 Note: docker run creates a new container every time you run it, docker start starts an existing container
+
+If you have multiple containers better to use docker compose
+
+to build docker-compose service
+```bash
+docker-compose up -d
+```
+
+to stop
+```bash
+docker-compose down
+```
+```bash
+docker-compose stop
+```
+
+to build again after changes 
+```bash
+docker-compose -d --build
+```
