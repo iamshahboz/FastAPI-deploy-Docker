@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import HTTPException, Depends, status, FastAPI
 from sqlalchemy.orm import Session
-import models
-import schemas
+from . import models
+from . import schemas
 from fastapi import APIRouter
-from database import get_db
+from .database import get_db
 
 app = FastAPI()
 

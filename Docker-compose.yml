@@ -7,21 +7,22 @@ services:
     depends_on:
       - db
     volumes:
-      - ./:/code:ro
+      - .:/app:rw
     environment:
-      - DATABASE_URL=postgresql://postgres:Bright#1270@localhost:5433/dockert
+      - DATABASE_URL=postgresql://postgres:Bright#1270@db:5432/dockert
     ports:
       - "8002:8002"
     
   db:
-      image: postgres:15-alpine
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      expose:
-        - 5433
-      environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=Bright#1270
-        - POSTGRES_DB=dockert
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Bright#1270
+      - POSTGRES_DB=dockert
+
 volumes:
-      postgres_data: 
+  postgres_data:
