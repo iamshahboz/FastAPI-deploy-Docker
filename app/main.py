@@ -1,10 +1,13 @@
 from typing import List
-from fastapi import HTTPException, Depends, status, FastAPI
+from fastapi import Depends, status, FastAPI
 from sqlalchemy.orm import Session
 from . import models
 from . import schemas
 from fastapi import APIRouter
-from .database import get_db
+from .database import get_db, engine
+
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
