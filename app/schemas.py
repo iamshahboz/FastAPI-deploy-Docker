@@ -35,8 +35,8 @@ class MedicineUpdate(BaseModel):
     
 class MedicineRead(MedicineBase):
     id: int
-    created_at: datetime  # Automatically includes timezone if stored that way
-    updated_at: datetime
+    created_at: Optional[datetime] = None  # Automatically includes timezone if stored that way
+    updated_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True  

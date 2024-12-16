@@ -17,7 +17,8 @@ class Medicine(Base):
     category = Column(String, nullable=True)
     prescription_required = Column(Boolean, default=False)
     dosage = Column(String, nullable=True)
-    created_at = Column(TIMESTAMP(timezone=True)),
+    created_at = Column(TIMESTAMP(timezone=True),
+                        server_default=func.now(),nullable=False)
     updated_at = Column(TIMESTAMP(timezone=True),
                         server_default=func.now(),
                         onupdate=func.now())

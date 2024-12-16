@@ -19,14 +19,14 @@ def create_medicine(medicine: schemas.MedicineCreate, db: Session=Depends(get_db
     new_medicine = models.Medicine(**medicine.model_dump())
     db.add(new_medicine)
     db.commit()
-    db.refresh()
+    db.refresh(new_medicine)
     return new_medicine 
 
 # get all medicines 
-@app.get('medicine', response_model=List[schemas.MedicineRead])
+@app.get('/medicine', response_model=List[schemas.MedicineRead])
 def get_all_medicines(db: Session = Depends(get_db)):
     medicines = db.query(models.Medicine).all()
-    return medicines 
+    return medicines
 
 
 # UPDATE: Update a medicine by ID
