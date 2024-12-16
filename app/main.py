@@ -28,3 +28,33 @@ def get_all_medicines(db: Session = Depends(get_db)):
     medicines = db.query(models.Medicine).all()
     return medicines 
 
+
+# UPDATE: Update a medicine by ID
+@app.put("/medicines/{medicine_id}", response_model=schemas.MedicineRead)
+def update_medicine(
+    medicine_id: int, medicine_data: schemas.MedicineUpdate, db: Session = Depends(get_db)
+):
+    medicine = db.query(models.Medicine).filter(models.Medicine.id == medicine_id).first()
+    if not medicine:
+        raise HTTPException(status_code=404, detail="Medicine not found.")
+    
+    # Update only the fields provided in the request
+    for key, value in medicine_data.dict(exclude_unset=True).items():
+        setattr(medicine, key, value)
+    
+    db.commit()
+    db.refresh(medicine)
+    return medicine
+
+
+# DELETE: Remove a medicine by ID
+@app.delete("/medicines/{medicine_id}", response_model=dict)
+def delete_medicine(medicine_id: int, db: Session = Depends(get_db)):
+    medicine = db.query(models.Medicine).filter(models.Medicine.id == medicine_id).first()
+    if not medicine:
+        raise HTTPException(status_code=404, detail="Medicine not found.")
+    
+    db.delete(medicine)
+    db.commit()
+    return {"message": f"Medicine with ID {medicine_id} has been deleted."}
+
