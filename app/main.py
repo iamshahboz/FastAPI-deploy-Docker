@@ -1,36 +1,30 @@
-from typing import List
-from fastapi import Depends, status, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from . import models
 from . import schemas
-from fastapi import APIRouter
 from .database import get_db, engine
+from typing import List 
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
-router = APIRouter(
-    prefix='/posts',
-    tags=['Posts']
-)
-
-
-@router.get('/getPost', response_model=List[schemas.CreatePost])
-def test_posts(db: Session = Depends(get_db)):
-    post = db.query(models.Post).all()
-
-    return post
-
-
-@router.post('/createPost', status_code=status.HTTP_201_CREATED, response_model=List[schemas.CreatePost])
-def create_posts(post_create: schemas.CreatePost, db: Session = Depends(get_db)):
-    new_post = models.Post(**post_create.dict())
-    db.add(new_post)
+# create a medicine 
+@app.post('/medicine', response_model=schemas.MedicineRead)
+def create_medicine(medicine: schemas.MedicineCreate, db: Session=Depends(get_db)):
+    existing_medicine = db.query(models.Medicine).filter(models.Medicine.name == medicine.name).first()
+    if existing_medicine:
+        raise HTTPException(status_code=400, detail='Medicine with this name already exists')
+    
+    new_medicine = models.Medicine(**medicine.model_dump())
+    db.add(new_medicine)
     db.commit()
-    db.refresh(new_post)
+    db.refresh()
+    return new_medicine 
 
-    return [new_post]
+# get all medicines 
+@app.get('medicine', response_model=List[schemas.MedicineRead])
+def get_all_medicines(db: Session = Depends(get_db)):
+    medicines = db.query(models.Medicine).all()
+    return medicines 
 
-app.include_router(router)
