@@ -57,4 +57,3 @@ def delete_medicine(medicine_id: int, db: Session = Depends(get_db)):
     db.delete(medicine)
     db.commit()
     return {"message": f"Medicine with ID {medicine_id} has been deleted."}
-

@@ -14,8 +14,7 @@ class MedicineBase(BaseModel):
     category: Optional[str] = None 
     prescription_required: bool = False 
     dosage: Optional[str] = None  
-    
-    
+
 class MedicineCreate(MedicineBase):
     pass 
 
@@ -33,10 +32,12 @@ class MedicineUpdate(BaseModel):
     dosage: Optional[str] = None
     
     
+    
 class MedicineRead(MedicineBase):
     id: int
-    created_at: Optional[datetime] = None  # Automatically includes timezone if stored that way
-    updated_at: Optional[datetime] = None
+    created_at: datetime 
+    updated_at: datetime 
+
 
     class Config:
         orm_mode = True  
