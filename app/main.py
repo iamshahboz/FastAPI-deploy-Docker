@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models
 from . import schemas
 from .database import get_db, engine
-from typing import List 
+from typing import List, Optional
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -24,9 +24,21 @@ def create_medicine(medicine: schemas.MedicineCreate, db: Session=Depends(get_db
 
 # get all medicines 
 @app.get('/medicine', response_model=List[schemas.MedicineRead])
-def get_all_medicines(db: Session = Depends(get_db)):
-    medicines = db.query(models.Medicine).all()
-    return medicines
+def get_all_medicines(db: Session = Depends(get_db),
+                      name: Optional[str] = None,
+                      brand: Optional[str] = None,
+                      generic_name: Optional[str] = None,
+                      price: Optional[float]=None):
+    medicines = db.query(models.Medicine)
+    if name:
+        medicines = medicines.filter(models.Medicine.name.ilike(f"%{name}%"))
+    if brand:
+        medicines = medicines.filter(models.Medicine.brand.ilike(f"%{brand}%"))
+    if generic_name:
+        medicines = medicines.filter(models.Medicine.generic_name.ilike(f"%{generic_name}%"))
+    if price:
+        medicines = medicines.filter(models.Medicine.price == price)
+    return medicines.all()
 
 
 # UPDATE: Update a medicine by ID
