@@ -1,4 +1,5 @@
 fastapi[standard]
 SQLAlchemy
 psycopg2
+pytest
 
